@@ -1,6 +1,9 @@
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Task2 {
 
@@ -34,7 +37,7 @@ public class Task2 {
         System.out.println(software3 + ": Загальний бал: " + totalScore3);
 
         // Визначення найкращого програмного забезпечення
-        String bestSoftware = determineBestSoftware(totalScore1, totalScore2, totalScore3, software1, software2, software3);
+        List<String> bestSoftware = determineBestSoftware(totalScore1, totalScore2, totalScore3, software1, software2, software3);
         System.out.println("Найкраще програмне забезпечення: " + bestSoftware);
 
         // Використання anyOf для отримання першого завершеного результату
@@ -71,13 +74,28 @@ public class Task2 {
         });
     }
 
-    private static String determineBestSoftware(int score1, int score2, int score3, String software1, String software2, String software3) {
-        if (score1 >= score2 && score1 >= score3) {
-            return software1;
-        } else if (score2 >= score1 && score2 >= score3) {
-            return software2;
+    private static List<String> determineBestSoftware(int score1, int score2, int score3, String software1, String software2, String software3) {
+
+        List<String> bestSoftwares = new ArrayList<>();
+
+        if (score1 > score2 && score1 > score3) {
+            return Collections.singletonList(software1);
+        } else if (score2 > score1 && score2 > score3) {
+            return Collections.singletonList(software2);
+        } else if (score3 > score1 && score3 > score2) {
+            return Collections.singletonList(software3);
         } else {
-            return software3;
+            if (score1 == score2) {
+                bestSoftwares.add(software1);
+                bestSoftwares.add(software2);
+            } else if (score1 == score3) {
+                bestSoftwares.add(software1);
+                bestSoftwares.add(software3);
+            } else {
+                bestSoftwares.add(software2);
+                bestSoftwares.add(software3);
+            }
+            return bestSoftwares;
         }
     }
 
